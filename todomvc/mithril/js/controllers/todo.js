@@ -9,11 +9,14 @@ var app = app || {};
         this.title = m.prop('');        // Temp title placeholder
         this.filter = m.prop(m.route.param('filter') || '');       // TodoList filter
 
+        var self = this
+
         // Add a Todo 
         this.add = function(title) {
             if(this.title()) {
                 this.list.push(new app.Todo({title: title()}));
                 this.title('');
+                window.localStorage.setItem(app.storageKey, JSON.stringify(self.list))
             }
         };
 
@@ -34,6 +37,7 @@ var app = app || {};
         // Removing a Todo from the list
         this.remove = function(key) {
             this.list.splice(key, 1)
+            window.localStorage.setItem(app.storageKey, JSON.stringify(self.list))
         }
 
         // Remove all Todos where Completed == true
@@ -42,6 +46,7 @@ var app = app || {};
                 if(this.list[i].completed())
                     this.list.splice(i, 1)
             }
+            window.localStorage.setItem(app.storageKey, JSON.stringify(self.list))
         }
 
         // Total amount of Todos completed
@@ -50,9 +55,16 @@ var app = app || {};
             
             for(var i = 0; i < this.list.length; i++)
                 if(this.list[i].completed())
-                    amount++;
+                    amount++
 
-            return amount;
+            return amount
+        }
+
+        this.save = function(prop) {
+            return function(v) {
+                prop(v)
+                window.localStorage.setItem(app.storageKey, JSON.stringify(self.list))
+            }
         }
     };
     

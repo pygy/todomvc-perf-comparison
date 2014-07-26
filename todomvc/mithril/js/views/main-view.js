@@ -34,7 +34,7 @@ var app = app || {};
                         return m('li', { class: task.completed() ? 'completed' : ''}, [
                             m('.view', [
                                 m('input.toggle[type=checkbox]', {
-                                    onclick: m.withAttr('checked', task.completed),
+                                    onclick: m.withAttr('checked', ctrl.save(task.completed)),
                                     checked: task.completed()
                                 }),
                                 m('label', task.title()),
